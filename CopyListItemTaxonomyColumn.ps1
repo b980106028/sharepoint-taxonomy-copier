@@ -34,8 +34,9 @@ try {
         throw "Kaynak öğe (ID: $sourceItemId) bulunamadı!"
     }
 
-    # Taxonomy değerini string formatında hazırla
-    $termValue = "$($envVariables["TERM_GUID"]);#$($envVariables["TERM_PATH"])|$($sourceItem[$taxonomyFieldName].TermGuid)"
+    # Taxonomy değerini kaynak öğeden al ve string formatında hazırla
+    $sourceTermPath = $sourceItem[$taxonomyFieldName].Label
+    $termValue = "$($envVariables["TERM_GUID"]);#$sourceTermPath|$($sourceItem[$taxonomyFieldName].TermGuid)"
     Write-Host "Kullanılacak term değeri: $termValue" -ForegroundColor Cyan
 
     # Tüm liste öğelerini al
