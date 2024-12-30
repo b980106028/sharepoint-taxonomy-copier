@@ -1,10 +1,10 @@
-# SharePoint Online Management Shell modülünü yükleme
+# Install SharePoint Online Management Shell module
 if (!(Get-Module -ListAvailable -Name PnP.PowerShell)) {
     Write-Host "Installing PnP.PowerShell module..." -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force
 }
 
-# .env dosyasından değişkenleri okuma
+# Read variables from .env file
 $envContent = Get-Content -Path ".\.env"
 $envVariables = @{}
 foreach ($line in $envContent) {
@@ -15,32 +15,32 @@ foreach ($line in $envContent) {
     }
 }
 
-# Değişkenleri .env dosyasından al
+# Get variables from .env file
 $siteUrl = $envVariables["SITE_URL"]
 $listName = $envVariables["LIST_NAME"]
 $sourceItemId = $envVariables["SOURCE_ITEM_ID"]
 $taxonomyFieldName = $envVariables["TAXONOMY_FIELD_NAME"]
 
 try {
-    # SharePoint Online'a web login ile bağlanma
+    # Connect to SharePoint Online using web login
     Write-Host "Connecting to SharePoint..." -ForegroundColor Yellow
     Connect-PnPOnline -Url $siteUrl -UseWebLogin
     Write-Host "Successfully connected to SharePoint!" -ForegroundColor Green
 
-    # Kaynak öğeden Lokasyon değerini alma
+    # Get taxonomy value from source item
     Write-Host "Getting source item (ID: $sourceItemId)..." -ForegroundColor Yellow
     $sourceItem = Get-PnPListItem -List $listName -Id $sourceItemId
     if ($null -eq $sourceItem) {
         throw "Source item (ID: $sourceItemId) not found!"
     }
 
-    # Taxonomy değerini kaynak öğeden al ve string formatında hazırla
+    # Prepare taxonomy value string from source item
     Write-Host "Getting taxonomy value from source item..." -ForegroundColor Yellow
     $sourceTermPath = $sourceItem[$taxonomyFieldName].Label
     $termValue = "$($envVariables["TERM_GUID"]);#$sourceTermPath|$($sourceItem[$taxonomyFieldName].TermGuid)"
     Write-Host "Term value to be used: $termValue" -ForegroundColor Cyan
 
-    # Tüm liste öğelerini al
+    # Get all list items
     Write-Host "Retrieving list items..." -ForegroundColor Yellow
     $allItems = Get-PnPListItem -List $listName
     Write-Host "Found $($allItems.Count) items in total." -ForegroundColor Gray
@@ -78,7 +78,7 @@ catch {
     Write-Host "Error details: $($_)" -ForegroundColor Red
 }
 finally {
-    # Bağlantıyı kapat
+    # Close the connection
     Disconnect-PnPOnline
     Write-Host "SharePoint connection closed." -ForegroundColor Gray
 }
