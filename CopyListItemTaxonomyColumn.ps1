@@ -1,6 +1,6 @@
 # SharePoint Online Management Shell modülünü yükleme
 if (!(Get-Module -ListAvailable -Name PnP.PowerShell)) {
-    Write-Host "PnP.PowerShell modülü yükleniyor..." -ForegroundColor Yellow
+    Write-Host "Installing PnP.PowerShell module..." -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force
 }
 
@@ -23,57 +23,62 @@ $taxonomyFieldName = $envVariables["TAXONOMY_FIELD_NAME"]
 
 try {
     # SharePoint Online'a web login ile bağlanma
-    Write-Host "SharePoint'e bağlanılıyor..." -ForegroundColor Yellow
+    Write-Host "Connecting to SharePoint..." -ForegroundColor Yellow
     Connect-PnPOnline -Url $siteUrl -UseWebLogin
-    Write-Host "SharePoint'e başarıyla bağlanıldı!" -ForegroundColor Green
+    Write-Host "Successfully connected to SharePoint!" -ForegroundColor Green
 
     # Kaynak öğeden Lokasyon değerini alma
-    Write-Host "Kaynak öğe alınıyor (ID: $sourceItemId)..." -ForegroundColor Yellow
+    Write-Host "Getting source item (ID: $sourceItemId)..." -ForegroundColor Yellow
     $sourceItem = Get-PnPListItem -List $listName -Id $sourceItemId
     if ($null -eq $sourceItem) {
-        throw "Kaynak öğe (ID: $sourceItemId) bulunamadı!"
+        throw "Source item (ID: $sourceItemId) not found!"
     }
 
     # Taxonomy değerini kaynak öğeden al ve string formatında hazırla
+    Write-Host "Getting taxonomy value from source item..." -ForegroundColor Yellow
     $sourceTermPath = $sourceItem[$taxonomyFieldName].Label
     $termValue = "$($envVariables["TERM_GUID"]);#$sourceTermPath|$($sourceItem[$taxonomyFieldName].TermGuid)"
-    Write-Host "Kullanılacak term değeri: $termValue" -ForegroundColor Cyan
+    Write-Host "Term value to be used: $termValue" -ForegroundColor Cyan
 
     # Tüm liste öğelerini al
-    Write-Host "Liste öğeleri alınıyor..." -ForegroundColor Yellow
+    Write-Host "Retrieving list items..." -ForegroundColor Yellow
     $allItems = Get-PnPListItem -List $listName
-    Write-Host "Toplam $($allItems.Count) öğe bulundu." -ForegroundColor Gray
+    Write-Host "Found $($allItems.Count) items in total." -ForegroundColor Gray
+    Write-Host "Starting to process items..." -ForegroundColor Yellow
     $counter = 0
 
     foreach ($item in $allItems) {
         try {
             if ($null -eq $item[$taxonomyFieldName] -or $item[$taxonomyFieldName] -eq "") {
-                Write-Host "ID: $($item.Id) güncelleniyor..." -ForegroundColor Yellow
+                Write-Host "Processing item ID: $($item.Id)..." -ForegroundColor Yellow
                 
                 Set-PnPListItem -List $listName -Identity $item.Id -Values @{
                     $taxonomyFieldName = $termValue
                 }
                 
                 $counter++
-                Write-Host "ID: $($item.Id) güncellendi." -ForegroundColor Green
-                Start-Sleep -Seconds 1  # Her güncelleme arasına 1 saniye bekleme ekle
+                Write-Host "Item ID: $($item.Id) successfully updated." -ForegroundColor Green
+                Start-Sleep -Seconds 1  # Throttling prevention delay
+            }
+            else {
+                Write-Host "Skipping item ID: $($item.Id) - Already has a value." -ForegroundColor Gray
             }
         }
         catch {
-            Write-Host "ID: $($item.Id) güncellenirken hata oluştu: $($_.Exception.Message)" -ForegroundColor Red
-            Write-Host "Hata detayı: $($_)" -ForegroundColor Red
+            Write-Host "Error updating item ID: $($item.Id): $($_.Exception.Message)" -ForegroundColor Red
+            Write-Host "Error details: $($_)" -ForegroundColor Red
         }
     }
 
-    Write-Host "`nİşlem başarıyla tamamlandı!" -ForegroundColor Green
-    Write-Host "Toplam $counter adet öğe güncellendi." -ForegroundColor Green
+    Write-Host "`nOperation completed successfully!" -ForegroundColor Green
+    Write-Host "Total items updated: $counter" -ForegroundColor Green
 }
 catch {
-    Write-Host "Bir hata oluştu: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "Hata detayı: $($_)" -ForegroundColor Red
+    Write-Host "An error occurred: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "Error details: $($_)" -ForegroundColor Red
 }
 finally {
     # Bağlantıyı kapat
     Disconnect-PnPOnline
-    Write-Host "SharePoint bağlantısı kapatıldı." -ForegroundColor Gray
+    Write-Host "SharePoint connection closed." -ForegroundColor Gray
 }
