@@ -28,7 +28,6 @@ Install-Module -Name PnP.PowerShell -Force
    - LIST_NAME: Your list name
    - SOURCE_ITEM_ID: ID of the item you want to copy taxonomy value from
    - TAXONOMY_FIELD_NAME: Name of the taxonomy field
-   - TERM_GUID: Term GUID (root term identifier)
 
 2. Run the script:
 ```powershell
