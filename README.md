@@ -38,9 +38,18 @@ Install-Module -Name PnP.PowerShell -Force
 ## Features
 
 - Uses web login for SharePoint Online connection
-- Fills empty taxonomy fields in the specified list
-- Includes 1-second delay between updates to prevent throttling
-- Includes error handling and logging
+- Automatically copies taxonomy field values:
+  - Takes the taxonomy value from a source item (specified by SOURCE_ITEM_ID)
+  - Copies this value to all items that have empty taxonomy fields in the same list
+  - Preserves the term structure (GUID and hierarchical path) from the source item
+- Smart update process:
+  - Only updates items with empty taxonomy fields
+  - Skips items that already have a value
+  - Includes 1-second delay between updates to prevent throttling
+- Comprehensive error handling and logging:
+  - Displays detailed progress information
+  - Shows success/error messages for each item
+  - Provides a summary of total updated items
 - Environment variables for sensitive data
 
 ## Security

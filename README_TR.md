@@ -38,9 +38,18 @@ Install-Module -Name PnP.PowerShell -Force
 ## Özellikler
 
 - SharePoint Online bağlantısı için web login kullanır
-- Belirtilen listedeki boş taksonomi alanlarını doldurur
-- Her güncelleme arasında 1 saniye bekler (throttling'i önlemek için)
-- Hata yönetimi ve loglama içerir
+- Taksonomi alanı değerlerini otomatik kopyalar:
+  - Kaynak öğeden (SOURCE_ITEM_ID ile belirtilen) taksonomi değerini alır
+  - Bu değeri aynı listedeki boş taksonomi alanlarına kopyalar
+  - Kaynak öğedeki term yapısını (GUID ve hiyerarşik yol) korur
+- Akıllı güncelleme süreci:
+  - Sadece boş taksonomi alanı olan öğeleri günceller
+  - Zaten değeri olan öğeleri atlar
+  - Her güncelleme arasında 1 saniye bekler (throttling'i önlemek için)
+- Kapsamlı hata yönetimi ve loglama:
+  - Detaylı ilerleme bilgisi gösterir
+  - Her öğe için başarı/hata mesajları verir
+  - Toplam güncellenen öğe sayısını raporlar
 - Hassas veriler için çevre değişkenleri kullanır
 
 ## Güvenlik
