@@ -28,7 +28,7 @@ Install-Module -Name PnP.PowerShell -Force
    - LIST_NAME: Liste adı
    - SOURCE_ITEM_ID: Taksonomi değerini kopyalamak istediğiniz öğenin ID'si
    - TAXONOMY_FIELD_NAME: Taksonomi alanının adı
-   - TERM_GUID: Term GUID'i
+   - TERM_GUID: Term GUID (kök terim tanımlayıcısı)
 
 2. Scripti çalıştırın:
 ```powershell
@@ -39,9 +39,9 @@ Install-Module -Name PnP.PowerShell -Force
 
 - SharePoint Online bağlantısı için web login kullanır
 - Taksonomi alanı değerlerini otomatik kopyalar:
-  - Kaynak öğeden (SOURCE_ITEM_ID ile belirtilen) taksonomi değerini alır
+  - Kaynak öğeden (SOURCE_ITEM_ID ile belirtilen) term yolu ve GUID dahil tüm taksonomi değerini alır
   - Bu değeri aynı listedeki boş taksonomi alanlarına kopyalar
-  - Kaynak öğedeki term yapısını (GUID ve hiyerarşik yol) korur
+  - Kaynak öğedeki term yapısını otomatik olarak korur
 - Akıllı güncelleme süreci:
   - Sadece boş taksonomi alanı olan öğeleri günceller
   - Zaten değeri olan öğeleri atlar

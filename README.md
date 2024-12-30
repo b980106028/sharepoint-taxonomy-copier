@@ -28,7 +28,7 @@ Install-Module -Name PnP.PowerShell -Force
    - LIST_NAME: Your list name
    - SOURCE_ITEM_ID: ID of the item you want to copy taxonomy value from
    - TAXONOMY_FIELD_NAME: Name of the taxonomy field
-   - TERM_GUID: Term GUID
+   - TERM_GUID: Term GUID (root term identifier)
 
 2. Run the script:
 ```powershell
@@ -39,9 +39,9 @@ Install-Module -Name PnP.PowerShell -Force
 
 - Uses web login for SharePoint Online connection
 - Automatically copies taxonomy field values:
-  - Takes the taxonomy value from a source item (specified by SOURCE_ITEM_ID)
+  - Takes the taxonomy value (including term path and GUID) from a source item (specified by SOURCE_ITEM_ID)
   - Copies this value to all items that have empty taxonomy fields in the same list
-  - Preserves the term structure (GUID and hierarchical path) from the source item
+  - Automatically preserves the complete term structure from the source item
 - Smart update process:
   - Only updates items with empty taxonomy fields
   - Skips items that already have a value
