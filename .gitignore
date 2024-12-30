@@ -1,0 +1,13 @@
+# Environment variables
+.env
+
+# PowerShell
+*.ps1.config
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+*.code-workspace
