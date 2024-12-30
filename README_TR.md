@@ -29,7 +29,6 @@ Install-Module -Name PnP.PowerShell -Force
    - SOURCE_ITEM_ID: Taksonomi değerini kopyalamak istediğiniz öğenin ID'si
    - TAXONOMY_FIELD_NAME: Taksonomi alanının adı
    - TERM_GUID: Term GUID'i
-   - TERM_PATH: Taksonomi yolu
 
 2. Scripti çalıştırın:
 ```powershell
