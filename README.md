@@ -8,7 +8,7 @@ A PowerShell script to copy taxonomy field values from one item to multiple item
 
 1. Clone this repository:
 ```powershell
-git clone [repo-url]
+git clone https://github.com/b980106028/sharepoint-taxonomy-copier.git
 ```
 
 2. Copy `.env.example` to `.env` and configure your environment variables:

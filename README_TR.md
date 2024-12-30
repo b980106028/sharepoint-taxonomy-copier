@@ -8,7 +8,7 @@ Bu PowerShell scripti, SharePoint listesindeki bir öğenin taksonomi alanını 
 
 1. Bu repoyu klonlayın:
 ```powershell
-git clone [repo-url]
+git clone https://github.com/b980106028/sharepoint-taxonomy-copier.git
 ```
 
 2. `.env.example` dosyasını `.env` olarak kopyalayın ve değişkenleri kendi ortamınıza göre düzenleyin:
